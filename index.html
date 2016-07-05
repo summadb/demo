@@ -21,6 +21,16 @@ var local1 = new PouchDB('kalimbaharkandant')
 echo('Opening local PouchDB "kalualualeiamba"')
 var local2 = new PouchDB('kalualualeiamba')
 
+/* set _all_dbs for the pouchdb inspector. */
+Promise.resolve(new PouchDB('pouch__all_dbs__'))
+.then(function (all) {
+  all.bulkDocs([
+    {_id: 'db_kalimbaharkandant'},
+    {_id: 'db_kalualualeiamba'}
+  ])
+})
+/* end */
+
 echo('Starting replication from https://summadb-temp.herokuapp.com/players/kalimbaharkandant/ to local.')
 echo('Starting replication from https://summadb-temp.herokuapp.com/players/players/kalualualeiamba/ to local.')
 Promise.all([
