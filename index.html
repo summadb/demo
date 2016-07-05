@@ -1,0 +1,36 @@
+<!doctype html>
+
+<title>PouchDB sync from SummaDB</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pouchdb/5.4.4/pouchdb.js"></script>
+<script src="https://cdn.rawgit.com/nolanlawson/transform-pouch/v1.0.2/dist/pouchdb.transform-pouch.min.js"></script>
+
+<pre><code id=log>
+
+</code></pre>
+
+<script>
+function echo (str) {
+  document.getElementById('log').innerHTML += str + '\n'
+}
+
+echo('Connecting to SummaDB at https://summadb-temp.herokuapp.com')
+var summa = new PouchDB('https://summadb-temp.herokuapp.com')
+echo('Opening local PouchDB "kalimbaharkandant"')
+var local1 = new PouchDB('kalimbaharkandant') 
+echo('Opening local PouchDB "kalualualeiamba"')
+var local2 = new PouchDB('kalualualeiamba')
+
+echo('Starting replication from https://summadb-temp.herokuapp.com/players/kalimbaharkandant/ to local.')
+echo('Starting replication from https://summadb-temp.herokuapp.com/players/players/kalualualeiamba/ to local.')
+Promise.all([
+  PouchDB.replicate('https://summadb-temp.herokuapp.com/players/kalimbaharkandant/', local1),
+  PouchDB.replicate('https://summadb-temp.herokuapp.com/players/kalualualeiamba/', local2)
+]).then(function (cs) {
+  cs.forEach(function (c) {
+    echo(JSON.stringify(c, null, 2))
+  })
+  echo('done.')
+  echo('go to <a href="/fauxton">/fauxton</a> to see these local databases created and populated on your local pouches.')
+})
+</script>
